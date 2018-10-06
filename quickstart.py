@@ -13,11 +13,18 @@ flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/admin-directory_v1-python-quickstart.json
 SCOPES = [
+    'https://www.googleapis.com/auth/admin.directory.group.member',
     'https://www.googleapis.com/auth/admin.directory.user',
-    'https://www.googleapis.com/auth/spreadsheets.readonly'
+    'https://www.googleapis.com/auth/spreadsheets.readonly',
 ]
 CLIENT_SECRET_FILE = 'client_secret.json'
+CREDENTIALS_FILE = 'cred.json'
 APPLICATION_NAME = 'hknweb'
+
+# Elections spreadsheet
+SPREADSHEET_ID = '1wnZfinKlVUsdXaz-W0ACnb_G7HFfDVlpudUSGpA1GrM'
+OFFICER_SHEET_ID = '682750401'
+MEMBER_SHEET_ID = '2002556869'
 
 
 def get_credentials():
@@ -30,7 +37,7 @@ def get_credentials():
         Credentials, the obtained credential.
     """
     credential_dir = os.getcwd()
-    credential_path = os.path.join(credential_dir, 'cred.json')
+    credential_path = os.path.join(credential_dir, CREDENTIALS_FILE)
 
     store = file.Storage(credential_path)
     credentials = store.get()
@@ -42,18 +49,15 @@ def get_credentials():
     return credentials
 
 
-def get_election_data(credentials):
+def get_election_data(credentials, range):
     # Setup the Sheets API
     http = credentials.authorize(httplib2.Http())
     service = build('sheets', 'v4', http=http)
 
     # Call the Sheets API
-    SPREADSHEET_ID = '1rAqIaxe138yzQ0uS5LKecvnz5wUVpUcaJzm0eh4c04w'
-    SEMESTER = 'Fall'
-    YEAR = '2018'
-    RANGE_NAME = '{} {}!A2:G16'.format(SEMESTER, YEAR)
-    result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID,
-                                                 range=RANGE_NAME).execute()
+    result = service.spreadsheets().values() \
+        .get(spreadsheetId=SPREADSHEET_ID, range=range) \
+        .execute()
     return result.get('values', [])
 
 
@@ -62,10 +66,11 @@ def get_users(credentials):
     service = build('admin', 'directory_v1', http=http)
 
     print('Getting the first 10 users in the domain')
-    results = service.users().list(customer='my_customer', maxResults=10,
-                                   orderBy='email').execute()
+    results = service.users() \
+        .list(customer='my_customer', maxResults=10, orderBy='email') \
+        .execute()
     return results.get('users', [])
-    
+
 
 def main():
     """Shows basic usage of the Google Admin SDK Directory API.
@@ -85,7 +90,8 @@ def main():
 
     print('Users:')
     for user in users:
-        print('{0} ({1})'.format(user['primaryEmail'], user['name']['fullName']))
+        print(user['primaryEmail'].split('@')[0])
+        # print('{0} ({1})'.format(user['primaryEmail'], user['name']['fullName']))
 
 
 if __name__ == '__main__':

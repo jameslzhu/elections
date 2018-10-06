@@ -1,0 +1,26 @@
+{
+    "access_token": "ya29.Glu2BWAAfpqCI25_fAbMQk5BzZbaZmqdGR-jUc2fSIW0v7QkvWA2OuA0QO9oZPkxGTJ5K8lcgpzQj-PFS8tjoYgtuZhlCaAl4BYgqFwMuGUXIneCMnv3G9cbTLMp",
+    "client_id": "751662663373-c1o01lmqo5hlrvhr0qq9bva7ihltut22.apps.googleusercontent.com",
+    "client_secret": "gujY7ElW6SVT3Rtug_3eYOQD",
+    "refresh_token": "1/zg-NLXJqOpfeW1wmiik9lNIxWJd-dKNN1Lg2WRlU_Bc",
+    "token_expiry": "2018-05-09T03:06:13Z",
+    "token_uri": "https://accounts.google.com/o/oauth2/token",
+    "user_agent": "hknweb",
+    "revoke_uri": "https://accounts.google.com/o/oauth2/revoke",
+    "id_token": null,
+    "id_token_jwt": null,
+    "token_response": {
+        "access_token": "ya29.Glu2BWAAfpqCI25_fAbMQk5BzZbaZmqdGR-jUc2fSIW0v7QkvWA2OuA0QO9oZPkxGTJ5K8lcgpzQj-PFS8tjoYgtuZhlCaAl4BYgqFwMuGUXIneCMnv3G9cbTLMp",
+        "expires_in": 3600,
+        "refresh_token": "1/zg-NLXJqOpfeW1wmiik9lNIxWJd-dKNN1Lg2WRlU_Bc",
+        "token_type": "Bearer"
+    },
+    "scopes": [
+        "https://www.googleapis.com/auth/spreadsheets.readonly",
+        "https://www.googleapis.com/auth/admin.directory.user"
+    ],
+    "token_info_uri": "https://www.googleapis.com/oauth2/v3/tokeninfo",
+    "invalid": false,
+    "_class": "OAuth2Credentials",
+    "_module": "oauth2client.client"
+}
