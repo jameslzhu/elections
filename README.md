@@ -22,3 +22,15 @@ Tasks:
 - [ ] Make it work
   
 Bonus! Make it work for the member signup too, but only for cmembers + jobs + alumni
+
+This script won't work unless you install the dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+If you followed the setup instructions from the [hknweb wiki](https://github.com/compserv/hknweb/wiki/Setup), you can install with pipenv:
+
+```
+pipenv install -r requirements.txt
+```
