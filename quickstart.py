@@ -78,23 +78,40 @@ def add_user_to_group(credientials, user, group):
     service = build('admin', 'directory_v1', http=http)
     return service.members().insert(groupKey=group, body=user).execute()
 
-def add_all_to_groups(credentials):
-    # add all users to all mailing lists
-    credentials = get_credentials()
-    election_data = get_election_data(credentials)
-    users = get_users(credentials)
+def add_officers_to_committes():
+    # add all officers to committees, read from spreadsheet column F
+    user_committee = {}
+    if election_data:
+        for i in range(0, election_data.length):
+            committee = election_data[i][5][:-1]
+            user_committee[users[i]] = committee
 
+    for user, committee in mailing_lists.items()
+        add_user_to_group(credentials, user, committee)
+
+def add_members_to_committes()
+    # add all members to committes, read from spreadsheet column G
     mailing_lists = {}
     if election_data:
-        for i in range(0, election_data.length)
+        for i in range(0, election_data.length):
             row = election_data[i]
-            mailing_list = row[6][:-1].split('@, ')
-            mailing_list[users[row]] = mailing_list
+            mailing = row[6][:-1].split('@, ')
+            mailing_lists[users[i]] = mailing_list
 
     for user, mailing_list in mailing_lists.items()
-        for group in mailing_list
-            add_user_to_group(credentials, user, group) 
+        for committee in mailing_list
+            add_user_to_group(credentials, user, committee)
 
+def add_all_to_committes():
+    # add all users to their committees and groups
+    add_officers_to_committes()
+    add_members_to_committes()
+
+
+def remove_user_from_group(credentials, userKey, groupKey):
+    http = credentials.authorize(httplib2.Http())
+    service = build('admin', 'directory_v1', http=http)
+    service.delete(group, user)
 
 def main():
     """Shows basic usage of the Google Admin SDK Directory API.
