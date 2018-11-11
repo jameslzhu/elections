@@ -1,6 +1,7 @@
 """
 Shows basic usage of the Sheets API. Prints values from a Google Spreadsheet.
 """
+# @author: Catherine Hu, James Zhu
 from apiclient.discovery import build
 from oauth2client import file, client, tools
 
@@ -70,6 +71,29 @@ def get_users(credentials):
         .list(customer='my_customer', maxResults=10, orderBy='email') \
         .execute()
     return results.get('users', [])
+
+def add_user_to_group(credientials, user, group):
+    #add USER to a mail list GROUP
+    http = credentials.authorize(httplib2.Http())
+    service = build('admin', 'directory_v1', http=http)
+    return service.members().insert(groupKey=group, body=user).execute()
+
+def add_all_to_groups(credentials):
+    # add all users to all mailing lists
+    credentials = get_credentials()
+    election_data = get_election_data(credentials)
+    users = get_users(credentials)
+
+    mailing_lists = {}
+    if election_data:
+        for i in range(0, election_data.length)
+            row = election_data[i]
+            mailing_list = row[6][:-1].split('@, ')
+            mailing_list[users[row]] = mailing_list
+
+    for user, mailing_list in mailing_lists.items()
+        for group in mailing_list
+            add_user_to_group(credentials, user, group) 
 
 
 def main():
