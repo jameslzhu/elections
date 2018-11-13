@@ -92,10 +92,12 @@ def add_users(credentials, election_data):
             email = row[3] + '@hkn.eecs.berkeley.edu'
             #TODO: get rid of spaces, capitalize names, error catching
             body = {'name': {'familyName': lastName, 'givenName': firstName}, 'password': randomPass, 'primaryEmail': email, 'changePasswordAtNextLogin': True}
-            if service.users().get(userKey=email):
-                continue
-            result = service.users().insert(body=body).execute()
-            print(result)
+            try:
+                existing_user = service.users().get(userKey=email).execute()
+                print('User already exists: ' + email)
+            except Exception as _:
+                result = service.users().insert(body=body).execute()
+            print('added ' + email + ' to users')
     print("ran add_users")
     return
 
@@ -109,10 +111,12 @@ def add_user_to_group(credentials, user, groupKey):
         'email': user + '@hkn.eecs.berkeley.edu',
         'role': 'MEMBER',
     }
-    print(body['email'])
-    if service.members().hasMember(groupKey=groupKey, memberKey=body.get('email')):
+    group = groupKey + '@hkn.eecs.berkeley.edu'
+    print(group)
+    response = service.members().hasMember(groupKey=group, memberKey=body.get('email')).execute()
+    if response['isMember']:
         return 
-    return service.members().insert(groupKey=groupKey + '@hkn.eecs.berkeley.edu', body=body).execute()
+    return service.members().insert(groupKey=group, body=body).execute()
 
 def add_officers_to_committes(credentials):
     # add all officers to committees, read from spreadsheet column F
