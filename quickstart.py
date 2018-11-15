@@ -50,7 +50,6 @@ def get_credentials():
         flow.user_agent = APPLICATION_NAME
         credentials = tools.run_flow(flow, store, flags)
         print('Storing credentials to ' + credential_path)
-    print("ran get_credentials")
     return credentials
 
 
@@ -58,12 +57,10 @@ def get_election_data(credentials, range):
     # Setup the Sheets API
     http = credentials.authorize(httplib2.Http())
     service = build('sheets', 'v4', http=http)
-
     # Call the Sheets API
     result = service.spreadsheets().values() \
         .get(spreadsheetId=SPREADSHEET_ID, range=range) \
         .execute()
-    print("ran get_election_data")
     return result.get('values', [])
 
 
@@ -88,7 +85,7 @@ def add_users(credentials, election_data):
             firstName = row[1].strip().capitalize()
             lastName = row[2].strip().capitalize()
             randomPass = ''.join(random.choice(string.ascii_letters) for m in range(8)) + '1!'
-            print(randomPass)
+            # print(randomPass)
             email = row[3] + '@hkn.eecs.berkeley.edu'
             #TODO: get rid of spaces, capitalize names, error catching
             body = {'name': {'familyName': lastName, 'givenName': firstName}, 'password': randomPass, 'primaryEmail': email, 'changePasswordAtNextLogin': True}
@@ -97,8 +94,7 @@ def add_users(credentials, election_data):
                 print('User already exists: ' + email)
             except Exception as _:
                 result = service.users().insert(body=body).execute()
-            print('added ' + email + ' to users')
-    print("ran add_users")
+            # print('added ' + email + ' to users')
     return
 
 def add_user_to_group(credentials, user, groupKey):
@@ -106,13 +102,11 @@ def add_user_to_group(credentials, user, groupKey):
     http = credentials.authorize(httplib2.Http())
     service = build('admin', 'directory_v1', http=http)
 
-    print("ran add_user_to_group")
     body = {
         'email': user + '@hkn.eecs.berkeley.edu',
         'role': 'MEMBER',
     }
     group = groupKey + '@hkn.eecs.berkeley.edu'
-    print(group)
     response = service.members().hasMember(groupKey=group, memberKey=body.get('email')).execute()
     if response['isMember']:
         return 
@@ -124,7 +118,6 @@ def add_officers_to_committes(credentials):
     # users = get_users(credentials)
     user_committee = []
 
-    print(election_data)
     if election_data:
         for i in range(0, len(election_data)):
             if len(election_data[i]) < 6:
@@ -135,9 +128,6 @@ def add_officers_to_committes(credentials):
 
     for user, committee in user_committee:
         result = add_user_to_group(credentials, user, committee+'-officers')
-        print(result)
-
-    print("ran add_officers_to_committes")
 
 def add_members_to_committes(credentials):
     # add all members to committes, read from spreadsheet column G
@@ -157,20 +147,18 @@ def add_members_to_committes(credentials):
     for user, mailing_list in mailing_lists:
         for committee in mailing_list:
             add_user_to_group(credentials, user, committee)
-            print('added ' + user + ' to ' + committee)
-    print("ran add_members_to_committes")
 
 def add_all_to_committes():
     # add all users to their committees and groups
     credentials = get_credentials()
     add_officers_to_committes(credentials)
     add_members_to_committes(credentials)
-    print("ran add_all_to_committes")
 
 credentials = get_credentials()
 election_data = get_election_data(credentials, "A2:H5")
 add_users(credentials, election_data)
 add_all_to_committes()
+
 
 """
 def main():
