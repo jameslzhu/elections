@@ -109,7 +109,7 @@ def add_user_to_group(credentials, user, groupKey):
     group = groupKey + '@hkn.eecs.berkeley.edu'
     response = service.members().hasMember(groupKey=group, memberKey=body.get('email')).execute()
     if response['isMember']:
-        return 
+        return
     return service.members().insert(groupKey=group, body=body).execute()
 
 def add_officers_to_committes(credentials):
@@ -166,7 +166,7 @@ def main():
 
     Creates a Google Admin SDK API service object and outputs a list of first
     10 users in the domain.
-    
+
     credentials = get_credentials()
     election_data = get_election_data(credentials)
     users = get_users(credentials)
