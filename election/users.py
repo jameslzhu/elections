@@ -17,12 +17,23 @@ def add_users(credentials, election_data):
             email = row[3] + '@hkn.eecs.berkeley.edu'
             secondary_email = row[4]
             #TODO: get rid of spaces, capitalize names, error catching
-            body = {'name': {'familyName': lastName, 'givenName': firstName}, 'password': randomPass, 'primaryEmail': email, 'changePasswordAtNextLogin': True}
+            body = {
+                'name': {'familyName': lastName, 'givenName': firstName}, 
+                'password': randomPass, 
+                'primaryEmail': email, 
+                'emails': [
+                    {
+                        'address': secondary_email,
+                        'type': 'work',
+                        'primary': False,
+                    },
+                ],
+                'changePasswordAtNextLogin': True
+            }
             try:
                 existing_user = service.users().get(userKey=email).execute()
                 print('User already exists: ' + email)
             except Exception as _:
                 result = service.users().insert(body=body).execute()
-            _ = service.users().update(body={'emails': [{'address': secondary_email, 'type': 'work', 'primary': False}]}).execute()
             # print('added ' + email + ' to users')
     return
