@@ -17,9 +17,13 @@ from election.sheets import get_election_data
 from election.users import add_users
 from election.groups import add_all_to_committes
 
+# test_data = [
+#     ['12/2/2018 22:24:44', 'Test', 'User', 'test_user', 'jameszhu@hkn.eecs.berkeley.edu', 'compserv@'],
+# ]
+
 def main():
     credentials = get_credentials()
-    election_data = get_election_data(credentials, NEW_OFFICER_RANGE)[1:]
+    election_data = get_election_data(credentials, NEW_OFFICER_RANGE)
     add_users(credentials, election_data)
     add_all_to_committes(credentials, election_data)
 

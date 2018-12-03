@@ -18,9 +18,9 @@ def add_users(credentials, election_data):
             secondary_email = row[4]
             #TODO: get rid of spaces, capitalize names, error catching
             body = {
-                'name': {'familyName': lastName, 'givenName': firstName}, 
-                'password': randomPass, 
-                'primaryEmail': email, 
+                'name': {'familyName': lastName, 'givenName': firstName},
+                'password': randomPass,
+                'primaryEmail': email,
                 'emails': [
                     {
                         'address': secondary_email,
