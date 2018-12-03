@@ -1,3 +1,6 @@
+from __future__ import (division, absolute_import, print_function,
+                        unicode_literals)
+
 SCOPES = [
     'https://www.googleapis.com/auth/admin.directory.group.member',
     'https://www.googleapis.com/auth/admin.directory.user',

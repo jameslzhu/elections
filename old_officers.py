@@ -9,7 +9,7 @@ from election.settings import (
     CREDENTIALS_FILE,
     APPLICATION_NAME,
     SPREADSHEET_ID,
-    NEW_OFFICER_RANGE,
+    OLD_OFFICER_RANGE,
 )
 
 from election.cred import get_credentials
@@ -19,7 +19,7 @@ from election.groups import add_all_to_committes
 
 def main():
     credentials = get_credentials()
-    election_data = get_election_data(credentials, NEW_OFFICER_RANGE)[1:]
+    election_data = get_election_data(credentials, OLD_OFFICER_RANGE)[1:]
     add_users(credentials, election_data)
     add_all_to_committes(credentials, election_data)
 
