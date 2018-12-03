@@ -1,7 +1,8 @@
-"""
-Shows basic usage of the Sheets API. Prints values from a Google Spreadsheet.
-"""
 # @author: Catherine Hu, James Zhu, Carolyn Wang (for add_users)
+
+from __future__ import (division, absolute_import, print_function,
+                        unicode_literals)
+
 from apiclient.discovery import build
 from oauth2client import file, client, tools
 
@@ -10,27 +11,18 @@ import os
 import random
 import string
 
-import argparse
-flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+from election.settings import (
+    SCOPES,
+    CLIENT_SECRET_FILE,
+    CREDENTIALS_FILE,
+    APPLICATION_NAME,
+    SPREADSHEET_ID,
+    NEW_OFFICER_RANGE,
+    OLD_OFFICER_RANGE,
+)
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/admin-directory_v1-python-quickstart.json
-SCOPES = [
-    'https://www.googleapis.com/auth/admin.directory.group.member',
-    'https://www.googleapis.com/auth/admin.directory.user',
-    'https://www.googleapis.com/auth/spreadsheets.readonly',
-    'https://www.googleapis.com/auth/admin.directory.group'
-]
-CLIENT_SECRET_FILE = 'client_secret.json'
-CREDENTIALS_FILE = 'cred.json'
-APPLICATION_NAME = 'hknweb'
-
-# Elections spreadsheet
-SPREADSHEET_ID = '1wnZfinKlVUsdXaz-W0ACnb_G7HFfDVlpudUSGpA1GrM'
-OFFICER_SHEET_ID = '682750401'
-MEMBER_SHEET_ID = '2002556869'
-
-
 def get_credentials():
     """Gets valid user credentials from storage.
 
@@ -61,7 +53,7 @@ def get_election_data(credentials, range):
     result = service.spreadsheets().values() \
         .get(spreadsheetId=SPREADSHEET_ID, range=range) \
         .execute()
-    return result.get('values', [])
+    return result.get('values', [])[1:]
 
 
 # def get_users(credentials):
@@ -112,12 +104,8 @@ def add_user_to_group(credentials, user, groupKey):
         return
     return service.members().insert(groupKey=group, body=body).execute()
 
-def add_officers_to_committes(credentials):
-    # add all officers to committees, read from spreadsheet column F
-    election_data = get_election_data(credentials, "A2:H5")
-    # users = get_users(credentials)
+def add_officers_to_committes(credentials, election_data):
     user_committee = []
-
     if election_data:
         for i in range(0, len(election_data)):
             if len(election_data[i]) < 6:
@@ -129,12 +117,8 @@ def add_officers_to_committes(credentials):
     for user, committee in user_committee:
         result = add_user_to_group(credentials, user, committee+'-officers')
 
-def add_members_to_committes(credentials):
-    # add all members to committes, read from spreadsheet column G
-    election_data = get_election_data(credentials, "A2:H5")
-    #users = get_users(credentials)
+def add_members_to_committes(credentials, election_data):
     mailing_lists = []
-
     if election_data:
         for i in range(0, len(election_data)):
             if len(election_data[i]) < 7:
@@ -148,17 +132,19 @@ def add_members_to_committes(credentials):
         for committee in mailing_list:
             add_user_to_group(credentials, user, committee)
 
-def add_all_to_committes():
+def add_all_to_committes(credentials, election_data):
     # add all users to their committees and groups
+    add_officers_to_committes(credentials, election_data)
+    add_members_to_committes(credentials, election_data)
+
+def main():
     credentials = get_credentials()
-    add_officers_to_committes(credentials)
-    add_members_to_committes(credentials)
+    election_data = get_election_data(credentials, NEW_OFFICER_RANGE)
+    add_users(credentials, election_data)
+    add_all_to_committes(credentials, election_data)
 
-credentials = get_credentials()
-election_data = get_election_data(credentials, "A2:H5")
-add_users(credentials, election_data)
-add_all_to_committes()
-
+if __name__ == '__main__':
+    main()
 
 """
 def main():
@@ -181,8 +167,4 @@ def main():
     for user in users:
         print(user['primaryEmail'].split('@')[0])
         # print('{0} ({1})'.format(user['primaryEmail'], user['name']['fullName']))
-
-
-if __name__ == '__main__':
-    main()
 """
