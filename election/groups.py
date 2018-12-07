@@ -25,7 +25,9 @@ def add_user_to_group(credentials, user, groupKey):
     response = service.members().hasMember(groupKey=group, memberKey=body.get('email')).execute()
     if response['isMember']:
         return
-    return service.members().insert(groupKey=group, body=body).execute()
+    _ = service.members().insert(groupKey=group, body=body).execute()
+    print("{}->{}".format(user, groupKey))
+    return
 
 
 def add_officers_to_committes(credentials, election_data):
@@ -40,6 +42,7 @@ def add_officers_to_committes(credentials, election_data):
 
     for user, committee in user_committee:
         result = add_user_to_group(credentials, user, committee+'-officers')
+        result = add_user_to_group(credentials, user, "current-"+committee)
 
 
 def add_members_to_committes(credentials, election_data):
