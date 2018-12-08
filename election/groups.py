@@ -9,13 +9,11 @@ import random
 import string
 
 from .settings import SPREADSHEET_ID
-from .cred import get_credentials
 
 
 def add_user_to_group(credentials, user, groupKey):
     #add USER to a mail list GROUP
-    http = credentials.authorize(httplib2.Http())
-    service = build('admin', 'directory_v1', http=http)
+    service = build('admin', 'directory_v1', credentials=credentials)
 
     body = {
         'email': user + '@hkn.eecs.berkeley.edu',

@@ -3,14 +3,7 @@
 from __future__ import (division, absolute_import, print_function,
                         unicode_literals)
 
-from election.settings import (
-    SCOPES,
-    CLIENT_SECRET_FILE,
-    CREDENTIALS_FILE,
-    APPLICATION_NAME,
-    SPREADSHEET_ID,
-    OLD_OFFICER_RANGE,
-)
+from election.settings import OLD_OFFICER_RANGE
 
 from election.cred import get_credentials
 from election.sheets import get_election_data

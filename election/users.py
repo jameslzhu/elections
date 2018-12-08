@@ -45,8 +45,7 @@ class User(object):
 
 def add_users(credentials, election_data):
     #create new account for users, by Carolyn Wang, modified by Catherine Hu
-    http = credentials.authorize(httplib2.Http())
-    service = build('admin', 'directory_v1', http=http)
+    service = build('admin', 'directory_v1', credentials=credentials)
     if election_data:
         for row in election_data:
             firstName = row[1].strip().capitalize()

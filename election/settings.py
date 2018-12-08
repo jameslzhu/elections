@@ -9,10 +9,11 @@ SCOPES = [
 ]
 
 # Stores API key
-CLIENT_SECRET_FILE = 'client_secret.json'
+# CLIENT_SECRET_FILE = 'secret/client_secret.json'
+SERVICE_ACCOUNT_FILE = 'secret/service.json'
 
 # Stores saved credentials from login
-CREDENTIALS_FILE = 'cred.json'
+CREDENTIALS_FILE = 'secret/cred.json'
 APPLICATION_NAME = 'hknweb'
 
 # Elections spreadsheet
