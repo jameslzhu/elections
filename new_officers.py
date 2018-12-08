@@ -5,7 +5,7 @@ from __future__ import (division, absolute_import, print_function,
 
 from election.settings import NEW_OFFICER_RANGE
 
-from election.auth import get_credentials
+from election.cred import get_credentials
 from election.sheets import get_election_data
 from election.users import add_users
 from election.groups import add_all_to_committes

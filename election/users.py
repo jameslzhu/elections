@@ -3,9 +3,7 @@ from __future__ import (division, absolute_import, print_function,
 
 import random
 import string
-import httplib2
-
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 
 
 def random_pass() -> str:
@@ -32,10 +30,10 @@ class User(object):
     def json(self):
         return {
             'name': {'familyName': self.last_name, 'givenName': self.first_name},
-            'primaryEmail': email,
+            'primaryEmail': self.email,
             'emails': [
                 {
-                    'address': secondary_email,
+                    'address': self.secondary_email,
                     'type': 'work',
                     'primary': False,
                 },

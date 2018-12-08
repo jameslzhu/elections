@@ -1,13 +1,7 @@
 from __future__ import (division, absolute_import, print_function,
                         unicode_literals)
 
-from apiclient.discovery import build
-
-import httplib2
-import os
-import random
-import string
-
+from googleapiclient.discovery import build
 from .settings import SPREADSHEET_ID
 
 
