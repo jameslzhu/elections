@@ -1,5 +1,4 @@
-from __future__ import (division, absolute_import, print_function,
-                        unicode_literals)
+from __future__ import unicode_literals
 
 SCOPES = [
     'https://www.googleapis.com/auth/admin.directory.group.member',
@@ -9,12 +8,7 @@ SCOPES = [
 ]
 
 # Stores API key
-# CLIENT_SECRET_FILE = 'secret/client_secret.json'
 SERVICE_ACCOUNT_FILE = 'secret/service.json'
-
-# Stores saved credentials from login
-CREDENTIALS_FILE = 'secret/cred.json'
-APPLICATION_NAME = 'hknweb'
 
 # Elections spreadsheet
 SPREADSHEET_ID = '1wnZfinKlVUsdXaz-W0ACnb_G7HFfDVlpudUSGpA1GrM'
