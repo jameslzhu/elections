@@ -15,7 +15,7 @@ from hknlib.election.groups import add_members_to_committes
 # ]
 
 def main():
-    credentials = get_credentials()
+    credentials = get_credentials("./secret/service.json")
     election_data = get_election_data(credentials, MEMBER_RANGE)
     # TODO FIXME HACK
     for line in election_data:
