@@ -3,12 +3,12 @@
 from __future__ import (division, absolute_import, print_function,
                         unicode_literals)
 
-from election.settings import MEMBER_RANGE
+from hknlib.election.settings import MEMBER_RANGE
 
-from election.cred import get_credentials
-from election.sheets import get_election_data
-from election.users import add_users
-from election.groups import add_members_to_committes
+from hknlib.election.cred import get_credentials
+from hknlib.election.sheets import get_election_data
+from hknlib.election.users import add_users
+from hknlib.election.groups import add_members_to_committes
 
 # test_data = [
 #     ['12/2/2018 22:24:44', 'Test', 'User', 'test_user', 'jameszhu@hkn.eecs.berkeley.edu', 'compserv@'],
