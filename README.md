@@ -11,7 +11,10 @@ You will first need the API key for OAuth. Specifically, you will need the
 **service account key** from the [Google Developers console](https://console.developers.google.com/),
 with the **hkn-ops** login.
 
-Download this service account key, which should be in a JSON file `service.json`.
+12/12/2019 UPDATE: service account and scope have been temporarily migrated. Please contact
+anthony.ding@hkn.mu for the service account credentials.
+
+Download this service account key, which should be in a JSON file `hknlib.json`.
 Place this file into `secret/`.
 
 ### Installing dependencies
@@ -39,6 +42,7 @@ Relevant docs:
 - HTTP methods: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 - Google Sheets API (v4): https://developers.google.com/sheets/api/
 - Google Admin API: https://developers.google.com/admin-sdk/directory/
+- Gmail API: https://developers.google.com/gmail/api/
 
 Tasks:
 
