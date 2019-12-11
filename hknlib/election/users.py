@@ -8,9 +8,8 @@ from email.mime.text import MIMEText
 import base64
 from urllib.error import HTTPError
 
-#Update when running scripts every year
-DEBUG=False
 EMAIL_SENDER = "hkn-ops@hkn.eecs.berkeley.edu"
+#Update when running scripts every year
 COMPSERV_OFFICERS = "Kevin Chen, Anthony Ding, Connie Huang, Brian Yu"
 COMPSERV_AOS = "Jeffrey Kim, Matthew Signorotti, Alexander Wu, Haolin Zhu"
 
@@ -80,17 +79,20 @@ def add_users(credentials, election_data):
                 print('User already exists: ' + email)
             except Exception as _:
                 result = service.users().insert(body=body).execute()
-                message = generate_email_message(firstName, EMAIL_SENDER, email, secondary_email)
+                message = generate_email_message(firstName, EMAIL_SENDER, row[3], secondary_email, randomPass)
                 send_message(gmail_service, 'me', message)
             # print('added ' + email + ' to users')
             
     return
 
-def generate_email_message(first_name, sender, hkn_email, receiver):
+def generate_email_message(first_name, sender, hkn_email, receiver, password):
     #Template can be found on hkn.mu/prot
     message_text = "Hi " + first_name + ",\n\n"
-    message_text += "I've created an account for you at " + hkn_email + ", and added you to the lists you've requested. " 
-    message_text += "You should be able to log in to your account with the password just sent to your email through Google Apps.\n\n"
+    message_text += "I've created an account for you at " + hkn_email + "@hkn.eecs.berkeley.edu, and added you to the lists you've requested. " 
+    message_text += "Here are your account details, as well as a temporarily generated password. You will be prompted to change your password "
+    message_text += "upon logging in, which you should do so promptly:\n\n"
+    message_text += ("Username: " + hkn_email + "\n")
+    message_text += ("Password: " + password + "\n\n")
     message_text += "This same account is used to access the HKN Wiki (prot) at https://hkn.mu/prot, and the HKN Slack at https://hkn.slack.com. " 
     message_text += "Please set your Slack display name (under Profile and Account) to your email username, so we can tag you.\n\n"
     message_text += "We've gathered a few notes about using your HKN accounts:\n\n"
@@ -102,14 +104,10 @@ def generate_email_message(first_name, sender, hkn_email, receiver):
     message_text += "If you have any other questions, feel free to contact us at compserv@hkn.eecs.berkeley.edu.\n\n"
     message_text += "Best,\nCompserv\n"
     message_text += (COMPSERV_OFFICERS + "\n" + COMPSERV_AOS + "\n")
-    if DEBUG:
-        message_text = "This is a test."
     message = MIMEText(message_text)
     message['to'] = receiver
     message['from'] = sender
     message['subject'] = "[Action Required] Welcome to HKN!"
-    if DEBUG:
-        print(message.as_string())
     return {'raw': base64.urlsafe_b64encode(message.as_string().encode('utf-8')).decode('ascii')}
 
 def send_message(service, user_id, message):
