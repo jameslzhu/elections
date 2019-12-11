@@ -15,7 +15,7 @@ from hknlib.election.groups import add_all_to_committes
 # ]
 
 def main():
-    credentials = get_credentials("./secret/service.json")
+    credentials = get_credentials("./secret/hknlib.json")
     election_data = get_election_data(credentials, NEW_OFFICER_RANGE)
     #print(election_data)
     add_users(credentials, election_data)
