@@ -86,7 +86,7 @@ def add_users(credentials, election_data):
     return
 
 def generate_email_message(first_name, sender, hkn_email, receiver, password):
-    #Template can be found on hkn.mu/prot
+    #Creating and encoding email text, by Anthony Ding
     message_text = "Hi " + first_name + ",\n\n"
     message_text += "I've created an account for you at " + hkn_email + "@hkn.eecs.berkeley.edu, and added you to the lists you've requested. " 
     message_text += "Here are your account details, as well as a temporarily generated password. You will be prompted to change your password "
@@ -111,6 +111,7 @@ def generate_email_message(first_name, sender, hkn_email, receiver, password):
     return {'raw': base64.urlsafe_b64encode(message.as_string().encode('utf-8')).decode('ascii')}
 
 def send_message(service, user_id, message):
+    #Uses Gmail API to send message, by Anthony Ding
     try:
         message = (service.users().messages().send(userId=user_id, body=message).execute())
     except HTTPError:
