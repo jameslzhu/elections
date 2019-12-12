@@ -25,3 +25,6 @@ def main():
         if DEBUG:
             print("Message just sent to company " + comp + " with following text:\n\n")
             print(message_text)
+
+if __name__ == '__main__':
+    main()

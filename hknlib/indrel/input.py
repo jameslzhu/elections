@@ -1,4 +1,5 @@
 from .settings import SPREADSHEET_ID, SENDER
+from .company import Company
 
 def get_companies(service, sheet_range):
     pass
