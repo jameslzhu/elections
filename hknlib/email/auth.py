@@ -14,7 +14,7 @@ def get_gmail_service(service_account_file):
 
 def get_sheets_service(service_account_file):
     creds = get_credentials(service_account_file)
-    return build('sheets', 'v4', credentials=credentials)
+    return build('sheets', 'v4', credentials=creds)
 
 def get_credentials(service_account_file):
     return service_account.Credentials.from_service_account_file(

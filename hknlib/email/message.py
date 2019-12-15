@@ -1,6 +1,10 @@
 import os
 import string
-from email.mime.text import MIMEText, MIMEMultipart, MIMEImage, MIMEAudio, MIMEBase
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from urllib.error import HTTPError
 import base64
 
