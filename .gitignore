@@ -1,5 +1,6 @@
 # Secrets
 *.json
+secret
 
 ## Python
 # Byte-compiled / optimized / DLL files

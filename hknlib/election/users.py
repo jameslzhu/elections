@@ -7,11 +7,10 @@ from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 import base64
 from urllib.error import HTTPError
+from hknlib.election.settings import COMPSERV_AOS, COMPSERV_OFFICERS
 
 EMAIL_SENDER = "hkn-ops@hkn.eecs.berkeley.edu"
 #Update when running scripts every year
-COMPSERV_OFFICERS = "Kevin Chen, Anthony Ding, Connie Huang, Brian Yu"
-COMPSERV_AOS = "Jeffrey Kim, Matthew Signorotti, Alexander Wu, Haolin Zhu"
 
 def random_pass() -> str:
     rand = random.SystemRandom()
