@@ -84,7 +84,7 @@ def date_sanity_check(assert_out=True):
     time_now = datetime.datetime.now()
     date_time_start, date_time_end = create_time_range(RECENT_CAND_MONTH, RECENT_CAND_YEAR, \
                                                        NEXT_CAND_MONTH, NEXT_CAND_YEAR)
-    result = date_time_start < time_now and time_now < date_time_end
+    result = date_time_start <= time_now and time_now <= date_time_end
     if assert_out:
         assert result, "Outside of current sanity check date range. Please check election/settings.py and make sure you have changed what you needed to change and reset the dates."
     return result
