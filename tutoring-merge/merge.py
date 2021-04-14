@@ -17,18 +17,18 @@ def mergeTutors(web, rails):
     #add all hkn-web tutors + info
     webNames = {}
     for tutor in web["tutors"]:
-        dict = {}
+        cache = {}
         for element in ["name", "timeSlots", "officePrefs", "adjacentPref", "numAssignments"]:
-            dict[element] = tutor[element]
-        webNames[dict["name"]] = dict
+            cache[element] = tutor[element]
+        webNames[cache["name"]] = cache
 
     #add all hkn-rails tutors + info
     railNames = {}
     for tutor in rails["tutors"]:
-        dict = {}
+        cache = {}
         for element in ["name", "tid", "courses"]:
-            dict[element] = tutor[element]
-        railNames[dict["name"]] = dict
+            cache[element] = tutor[element]
+        railNames[cache["name"]] = cache
 
     not_matched_rails = []
     for name in webNames.keys():
@@ -52,20 +52,20 @@ def mergeSlots(web, rails):
     # (hour, day) to the corresponding data in each database
     webDict = {}
     for element in web["slots"]:
-        dict = {}
+        cache = {}
         for key in element:
             if not key in ["hour", "day"]:
-                dict[key] = element[key]
-        webDict[(element["hour"], element["day"])] = dict
+                cache[key] = element[key]
+        webDict[(element["hour"], element["day"])] = cache
 
     railsDict = {}
     for element in rails["slots"]:
         if element["office"] == "Cory":
-            dict = {}
+            cache = {}
             for key in element:
                 if not key in ["hour", "day"]:
-                    dict[key] = element[key]
-            railsDict[(element["hour"], element["day"][:3])] = dict
+                    cache[key] = element[key]
+            railsDict[(element["hour"], element["day"][:3])] = cache
 
     #map web slot ids to rails slot ids
     webIDtorailsID = {}
@@ -79,15 +79,15 @@ def mergeSlots(web, rails):
     errors = []
     for key in webDict:
         if key in railsDict:
-            dict = {}
-            dict["hour"] = key[0]
-            dict["name"] = railsDict[key]["name"]
-            dict["day"] = key[1]
-            dict["office"] = webDict[key]["office"]
-            dict["courses"] = [0] * len(railsDict[key]["courses"])
-            dict["adjacentSlotIDs"] = [webIDtorailsID[id] for id in webDict[key]["adjacentSlotIDs"]]
-            dict["sid"] = railsDict[key]["sid"]
-            mergedList += [dict]
+            merge = {}
+            merge["hour"] = key[0]
+            merge["name"] = railsDict[key]["name"]
+            merge["day"] = key[1]
+            merge["office"] = webDict[key]["office"]
+            merge["courses"] = [0] * len(railsDict[key]["courses"])
+            merge["adjacentSlotIDs"] = [webIDtorailsID[id] for id in webDict[key]["adjacentSlotIDs"]]
+            merge["sid"] = railsDict[key]["sid"]
+            mergedList += [merge]
         else:
             errors += [key]
     return mergedList, errors
