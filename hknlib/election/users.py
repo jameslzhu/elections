@@ -1,6 +1,7 @@
 from __future__ import (division, absolute_import, print_function,
                         unicode_literals)
 
+import csv
 import random
 import string
 from googleapiclient.discovery import build
@@ -47,6 +48,42 @@ class User(object):
             ],
         }
 
+def import_users(credentials):
+    '''
+    USER_SPREADSHEET_ID = XXXXXXXX
+
+    sheets_service = build('sheets', 'v4', credentials=credentials)
+    gmail_service = build('gmail', 'v1', credentials=credentials)
+    
+    spreadsheets = sheets_service.spreadsheets()
+    result = spreadsheets.values().get(spreadsheetId=USER_SPREADSHEET_ID).execute()
+    
+    values = result.get('values', [])
+
+    with open('imported_users.csv', 'r') as inp:
+        csvwriter = csv.csvwriter(inp)
+
+        for row in values:
+            first_name = row[1].strip().capitalize()
+            last_name = row[2].strip().capitalize()
+            username = row[3].strip()
+            
+            # Below 2 lines not currently used
+            committee = row[5].strip()
+            committee_membership = row[6].strip()
+            
+            groups = []
+            if row[7] == 'Yes':
+                groups.append('candidate')
+
+
+            try:
+                csvwriter.writerow([first_name, last_name, username, groups])            
+            except Exception as exception:
+                print(exception.message)
+                return
+    '''
+    pass
 
 def add_users(credentials, election_data):
     #create new account for users, by Carolyn Wang, modified by Catherine Hu
