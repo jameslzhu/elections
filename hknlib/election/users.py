@@ -51,16 +51,20 @@ class User(object):
 def import_users(credentials):
     '''
     USER_SPREADSHEET_ID = XXXXXXXX
+    DATA_SHEET_NAME = XXXXXXXX
 
     sheets_service = build('sheets', 'v4', credentials=credentials)
     gmail_service = build('gmail', 'v1', credentials=credentials)
     
     spreadsheets = sheets_service.spreadsheets()
-    result = spreadsheets.values().get(spreadsheetId=USER_SPREADSHEET_ID).execute()
+    result = spreadsheets.values().get(
+        spreadsheetId=USER_SPREADSHEET_ID, 
+        range=DATA_SHEET_NAME
+        ).execute()
     
     values = result.get('values', [])
 
-    with open('imported_users.csv', 'r') as inp:
+    with open('imported_users.csv', 'w+') as inp:
         csvwriter = csv.csvwriter(inp)
 
         for row in values:
@@ -75,7 +79,6 @@ def import_users(credentials):
             groups = []
             if row[7] == 'Yes':
                 groups.append('candidate')
-
 
             try:
                 csvwriter.writerow([first_name, last_name, username, groups])            
