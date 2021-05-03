@@ -9,9 +9,9 @@ HKN_DOMAIN = '@hkn.eecs.berkeley.edu'
 
 def add_user_to_group(credentials, user, groupKey, hkn_username=True):
     #add USER to a mail list GROUP
-    user_email = user.strip()
+    user = user.strip()
     
-    user_email = user_email + HKN_DOMAIN
+    user_email = user + HKN_DOMAIN
     
     add_email_to_group(credentials, user_email, groupKey, email_list=False, user=user)
 
