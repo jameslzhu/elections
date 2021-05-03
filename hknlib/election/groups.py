@@ -2,24 +2,48 @@ from __future__ import (division, absolute_import, print_function,
                         unicode_literals)
 
 from googleapiclient.discovery import build
-from .settings import SPREADSHEET_ID
+from googleapiclient.errors import HttpError
+from .settings import ELECTION_SPREADSHEET_ID
 
+HKN_DOMAIN = '@hkn.eecs.berkeley.edu'
 
-def add_user_to_group(credentials, user, groupKey):
+def add_user_to_group(credentials, user, groupKey, hkn_username=True):
     #add USER to a mail list GROUP
+    user = user.strip()
+    
+    user_email = user + HKN_DOMAIN
+    
+    add_email_to_group(credentials, user_email, groupKey, email_list=False, user=user)
+
+def add_email_to_group(credentials, email, groupKey, email_list=True, user=None):
+    if user is None:
+        user = email
+    
     service = build('admin', 'directory_v1', credentials=credentials)
+    
+    email = email.strip()
 
     body = {
-        'email': user + '@hkn.eecs.berkeley.edu',
+        'email': email,
         'role': 'MEMBER',
     }
-    group = groupKey + '@hkn.eecs.berkeley.edu'
-    response = service.members().hasMember(groupKey=group, memberKey=body.get('email')).execute()
-    if response['isMember']:
-        return
-    _ = service.members().insert(groupKey=group, body=body).execute()
-    print("{}->{}".format(user, groupKey))
-    return
+    group = groupKey + HKN_DOMAIN
+    if not email_list:
+        response = service.members().hasMember(groupKey=group, memberKey=body.get('email')).execute()
+        if response['isMember']:
+            return False
+    try:
+        _ = service.members().insert(groupKey=group, body=body).execute()
+        print("{}->{}".format(user, groupKey))
+    except HttpError as e:
+        if e.resp.status == 409 and e._get_reason().strip() == "Member already exists.":
+            return False
+        else:
+            print(body)
+            print(e.resp.status, e._get_reason().strip())
+            print("")
+            raise e
+    return True
 
 
 def add_officers_to_committes(credentials, election_data):
@@ -28,13 +52,17 @@ def add_officers_to_committes(credentials, election_data):
         for i in range(0, len(election_data)):
             if len(election_data[i]) < 6:
                 continue
-            committee = election_data[i][5][:-1]
+            committee = election_data[i][5]
+            if committee == "N/A":
+                continue
+            if committee[-1:] == "@":
+                committee = committee[:-1]
             user_committee.append((election_data[i][3], committee))
             #user_committee[users[i]] = committee
 
     for user, committee in user_committee:
-        result = add_user_to_group(credentials, user, committee+'-officers')
-        result = add_user_to_group(credentials, user, "current-"+committee)
+        add_user_to_group(credentials, user, committee+'-officers')
+        add_user_to_group(credentials, user, "current-"+committee)
 
 
 def add_members_to_committes(credentials, election_data):
