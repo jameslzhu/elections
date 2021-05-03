@@ -32,26 +32,31 @@ You may choose to override with DATE_SANITY_OVERRIDE
 """
 DATE_SANITY_OVERRIDE = False
 
-RECENT_CAND_MONTH = 12    # Take month and year of most recent semester
-RECENT_CAND_YEAR = 2020   #  Candidate Initiation (on the dot)
-                          # Normally, Fall is 12 (December), Spring is 5 (May)
+RECENT_CAND_MONTH = 5     # Take month and year of most recent semester
+RECENT_CAND_YEAR = 2021   #  Candidate Initiation (on the dot)
+                          # Usually, this is when new officers are elected
+                          # Normally, during the Fall   is 12 (December),
+                          #           during the Spring is  5 (May)
+# Script will look at this as the START of the month and year listed
 
-NEXT_CAND_MONTH = 5       # Take month and year estimate of next semester
+NEXT_CAND_MONTH = 12      # Take month and year estimate of NEXT semester
 NEXT_CAND_YEAR = 2021     #  Candidate Initiation (on the dot)
-                          # Normally, Fall Candidate Semester is: April (4) or May (5)
-# Will use end of the month of "Month - 1" by the way (with 1 - 1 ==> 12)
+                          # Example, current Semester is Fall, then use the Spring date here
+                          #             OR
+                          #          current Semester is Spring, then use the Fall date here
+# Will use END of the month of "Month - 1" by the way (with 1 - 1 ==> 12)
 
-COMPSERV_OFFICERS = "Oscar Chan, Sam Maher, Alvin Xu, Jeffrey Deng"
-COMPSERV_AOS = "Haolin Zhu, Sid Ijju"
+COMPSERV_OFFICERS = "Oscar Chan, Sam Maher, Brian Yu, Anthony Maltsev"
+COMPSERV_AOS = "Augie Eriksson, Alvin Xu, Sid Ijju"
 
-NEW_OFFICER_SHEET = 'New Officers Sp21'
+NEW_OFFICER_SHEET = 'New Officers Fa21'
 # OLD_OFFICER_SHEET = 'Returning Officers'
-MEMBER_SHEET = 'New Members Sp21'
+MEMBER_SHEET = 'New Members Fa21'
 INFOSESSIONS_SHEET = 'Form Responses 1'
 
-NEW_OFFICER_SHEET_ID = '1885638305'
+NEW_OFFICER_SHEET_ID = '1263647029'
 # OLD_OFFICER_SHEET_ID = '682750401'
-MEMBER_SHEET_ID = '1338093122'
+MEMBER_SHEET_ID = '1974440615'
 
 # You probably don't have to edit this one as often
 INFOSESSIONS_SHEET_ID = '1100426286'
@@ -71,7 +76,7 @@ def create_time_range(start_month, start_year, end_month, end_year):
     end_month = (end_month - 1) % 12
     if end_month == 0:
         end_month = 12
-    start_day = calendar.monthrange(start_year, start_month)[0]
+    start_day = 1
     end_day = calendar.monthrange(end_year, end_month)[1]
     date_time_start = datetime.datetime(year=start_year, month=start_month, day=start_day)
     date_time_end   = datetime.datetime(year=end_year, month=end_month, day=end_day)
