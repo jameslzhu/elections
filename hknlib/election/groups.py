@@ -11,7 +11,7 @@ def add_user_to_group(credentials, user, groupKey, hkn_username=True):
     #add USER to a mail list GROUP
     user_email = user.strip()
     
-    user_email = user + HKN_DOMAIN
+    user_email = user_email + HKN_DOMAIN
     
     add_email_to_group(credentials, user_email, groupKey, email_list=False, user=user)
 
@@ -61,8 +61,8 @@ def add_officers_to_committes(credentials, election_data):
             #user_committee[users[i]] = committee
 
     for user, committee in user_committee:
-        result = add_user_to_group(credentials, user, committee+'-officers')
-        result = add_user_to_group(credentials, user, "current-"+committee)
+        add_user_to_group(credentials, user, committee+'-officers')
+        add_user_to_group(credentials, user, "current-"+committee)
 
 
 def add_members_to_committes(credentials, election_data):
