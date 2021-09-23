@@ -1,17 +1,17 @@
 # Paste the below in the Production Sandbox Rails Console
 
-word = "{" 
+output_json = "{" 
 
 Slot.all.each do |s|
     if !s.tutors.empty?
-        word << "\"#{s.id}\": ["
+        output_json << "\"#{s.id}\": ["
         s.tutors.each do |t|
-            word << "#{t.person_id}, "
+            output_json << "#{t.person_id}, "
         end
-        word << "], "
+        output_json << "], "
     end
 end
 
-word << "}"
+output_json << "}"
 
-puts word
+puts output_json
