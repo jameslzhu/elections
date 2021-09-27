@@ -26,7 +26,7 @@ def mergeTutors(web, rails):
     railNames = {}
     for tutor in rails["tutors"]:
         cache = {}
-        for element in ["name", "tid", "courses"]:
+        for element in ["name", "tid", "courses", "numAssignments"]:
             cache[element] = tutor[element]
         railNames[cache["name"]] = cache
 
@@ -35,37 +35,50 @@ def mergeTutors(web, rails):
         if name in railNames:
             keys = railNames[name].keys()
             for key in keys:
-                webNames[name][key] = railNames[name][key]
+                if key == "numAssignments" and webNames[name][key] != railNames[name][key]:
+                    print(name, webNames[name][key], railNames[name][key])
+                else:
+                    webNames[name][key] = railNames[name][key]
         else:
-            not_matched_rails += [name]
+            not_matched_rails.append(name)
 
     not_matched_web = []
     for name in railNames.keys():
         if not name in webNames:
-            not_matched_web += [name]
+            not_matched_web.append(name)
 
     mergedTutors = list(webNames.values())
     return mergedTutors, not_matched_rails, not_matched_web
 
+SPECIAL_DAY_CONVERSION = {"Tuesday" : "Tues", "Thursday" : "Thus"}
+
+def shorten_day_of_week(day_of_week):
+    return SPECIAL_DAY_CONVERSION.get(day_of_week, day_of_week[:3])
+
+def hash_rails_element(element):
+    return (element["office"], element["hour"], shorten_day_of_week(element["day"]))
+
+def hash_web_element(element):
+    return (element["office"].replace("Hybrid/", ""), element["hour"], element["day"])
+
 def mergeSlots(web, rails):
     #create dictionary for both web and rails that maps the tuple
-    # (hour, day) to the corresponding data in each database
+    # (office, hour, day) to the corresponding data in each database
     webDict = {}
     for element in web["slots"]:
         cache = {}
         for key in element:
-            if not key in ["hour", "day"]:
+            if key not in ["office", "hour", "day"]:
                 cache[key] = element[key]
-        webDict[(element["hour"], element["day"])] = cache
+        webDict[hash_web_element(element)] = cache
 
     railsDict = {}
     for element in rails["slots"]:
-        if element["office"] == "Cory":
-            cache = {}
-            for key in element:
-                if not key in ["hour", "day"]:
-                    cache[key] = element[key]
-            railsDict[(element["hour"], element["day"][:3])] = cache
+        cache = {}
+        for key in element:
+            if key not in ["office", "hour", "day"]:
+                cache[key] = element[key]
+        railsDict[hash_rails_element(element)] = cache
 
     #map web slot ids to rails slot ids
     webIDtorailsID = {}
@@ -73,24 +86,24 @@ def mergeSlots(web, rails):
         webID = webDict[key]["sid"]
         if key in railsDict:
             railsID = railsDict[key]["sid"]
-        webIDtorailsID[webID] = railsID
+            webIDtorailsID[webID] = railsID
 
     mergedList = []
-    errors = []
+    web_errors = []
     for key in webDict:
         if key in railsDict:
             merge = {}
-            merge["hour"] = key[0]
+            merge["hour"] = key[1]
             merge["name"] = railsDict[key]["name"]
-            merge["day"] = key[1]
-            merge["office"] = webDict[key]["office"]
-            merge["courses"] = [0] * len(railsDict[key]["courses"])
-            merge["adjacentSlotIDs"] = [webIDtorailsID[id] for id in webDict[key]["adjacentSlotIDs"]]
-            merge["sid"] = railsDict[key]["sid"]
-            mergedList += [merge]
+            merge["day"] = key[2]
+            merge["office"] = key[0] #webDict[key]["office"]
+            merge["courses"] = railsDict[key]["courses"] if key[0] != "Online" else [1] * len(railsDict[key]["courses"])
+            merge["adjacentSlotIDs"] = webDict[key]["adjacentSlotIDs"]
+            merge["sid"] = webDict[key]["sid"]
+            mergedList.append(merge)
         else:
-            errors += [key]
-    return mergedList, errors
+            web_errors.append(key)
+    return mergedList, web_errors
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
@@ -115,7 +128,7 @@ if __name__ == "__main__":
     print(notInRails)
     print("Tutors exist in hkn-rails but not in hkn-web")
     print(notInWeb)
-    print("(Hour, Day) entries in hkn-web but not in hkn-rails")
+    print("(Office, Hour, Day) entries in hkn-web but not in hkn-rails")
     print(errors)
     """
     writeJSONtoFile(outJSON, outfile)
