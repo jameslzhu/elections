@@ -17,18 +17,29 @@ anthony.ding@hkn.mu for the service account credentials.
 Download this service account key, which should be in a JSON file `hknlib.json`.
 Place this file into `secret/`.
 
+### Recommended: Creating a Virtual Environment (venv)
+
+This script won't work unless you install the dependencies
+
+Before installing dependencies, please create a Virtual Environment since we do lock our dependencies to certain versions
+
+First, `cd` your terminal to the hknlib folder and it's content
+
+Next, run the following based on your OS to create a venv Virtual Environment:
+* On Linux / Mac: `python3 -m venv .venv`
+* On Windows: `py -m venv .venv`
+
+Finally activate the venv by:
+* On Linux / Mac: `source .venv/bin/activate`
+* On Windows: `.\.venv\Scripts\activate`
+
 ### Installing dependencies
 
 This script won't work unless you install the dependencies:
 
+To install with `pip`, run the following inside the hknlib folder (Recommended: Read **Creating a Virtual Environment (venv)**):
 ```
 pip install -r requirements.txt
-```
-
-If you followed the setup instructions from the [hknweb wiki](https://github.com/compserv/hknweb/wiki/Setup), you can install with pipenv:
-
-```
-pipenv install -r requirements.txt
 ```
 
 ### Scripts
