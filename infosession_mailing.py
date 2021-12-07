@@ -11,7 +11,7 @@ from hknlib.election.users import add_users
 from hknlib.election.groups import add_email_to_group
 
 # test_data = [
-#     ['12/2/2018 22:24:44', 'ochan2@berkeley.edu', 'EECS', 'ochan2@berkeley.edu', 'Yes'],
+#     ['12/2/2018 22:24:44', 'EMAIL@berkeley.edu', 'EECS', 'EMAIL@berkeley.edu', 'Yes'],
 # ]
 
 def main():
