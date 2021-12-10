@@ -44,8 +44,10 @@ pip install -r requirements.txt
 
 ### Scripts
 
-The three scripts `new_members.py`, `new_officers.py`, and `old_officers.py`
+The three scripts `new_members.py`, `new_officers.py`, and `infosession_mailing.py`
 should now work, using these credentials and the hknlib/election module.
+
+We do not use `old_officers.py` anymore and is no longer supported and maintained.
 
 ## Development
 
