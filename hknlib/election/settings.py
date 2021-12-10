@@ -32,31 +32,31 @@ You may choose to override with DATE_SANITY_OVERRIDE
 """
 DATE_SANITY_OVERRIDE = False
 
-RECENT_CAND_MONTH = 5     # Take month and year of most recent semester
+RECENT_CAND_MONTH = 12    # Take month and year of most recent semester
 RECENT_CAND_YEAR = 2021   #  Candidate Initiation (on the dot)
                           # Usually, this is when new officers are elected
                           # Normally, during the Fall   is 12 (December),
                           #           during the Spring is  5 (May)
 # Script will look at this as the START of the month and year listed
 
-NEXT_CAND_MONTH = 12      # Take month and year estimate of NEXT semester
-NEXT_CAND_YEAR = 2021     #  Candidate Initiation (on the dot)
+NEXT_CAND_MONTH = 5       # Take month and year estimate of NEXT semester
+NEXT_CAND_YEAR = 2022     #  Candidate Initiation (on the dot)
                           # Example, current Semester is Fall, then use the Spring date here
                           #             OR
                           #          current Semester is Spring, then use the Fall date here
 # Will use END of the month of "Month - 1" by the way (with 1 - 1 ==> 12)
 
-COMPSERV_OFFICERS = "Oscar Chan, Sam Maher, Brian Yu, Anthony Maltsev"
-COMPSERV_AOS = "Augie Eriksson, Alvin Xu, Sid Ijju"
+COMPSERV_OFFICERS = "Oscar Chan, Brian Yu, Anthony Maltsev, Anirban Sarkar"
+COMPSERV_AOS = "Sam Maher, Yousef Helal, Justin Zhang"
 
-NEW_OFFICER_SHEET = 'New Officers Fa21'
+NEW_OFFICER_SHEET = 'New Officers Sp22'
 # OLD_OFFICER_SHEET = 'Returning Officers'
-MEMBER_SHEET = 'New Members Fa21'
+MEMBER_SHEET = 'New Members Sp22'
 INFOSESSIONS_SHEET = 'Form Responses 1'
 
-NEW_OFFICER_SHEET_ID = '1263647029'
+NEW_OFFICER_SHEET_ID = '272309335'
 # OLD_OFFICER_SHEET_ID = '682750401'
-MEMBER_SHEET_ID = '1974440615'
+MEMBER_SHEET_ID = '1002817381'
 
 # You probably don't have to edit this one as often
 INFOSESSIONS_SHEET_ID = '1100426286'
