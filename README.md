@@ -1,7 +1,7 @@
-elections
+HKNlib
 =========
 
-Scripts for running HKN elections.
+Scripts for running HKN automated account related stuff. (Formerly, HKN elections)
 
 ## Usage
 
@@ -48,6 +48,8 @@ The three scripts `new_members.py`, `new_officers.py`, and `infosession_mailing.
 should now work, using these credentials and the hknlib/election module.
 
 We do not use `old_officers.py` anymore and is no longer supported and maintained.
+
+There are various standalone scripts in the `standalone_scripts` folder that run by itself. See file comments for specific instructions. Currently, there is one for LastPass provisioning and one for the HKN Rails website automating the approval accounts process.
 
 ## Development
 
