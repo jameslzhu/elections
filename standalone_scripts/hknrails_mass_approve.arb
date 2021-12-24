@@ -1,0 +1,78 @@
+"""
+Copy and paste Rails code to the Rails console
+
+Fill in a list of emails into the '[]' portion of the
+`email_list = Set[]` code as a list of strings
+
+Sample code to paste:
+```
+success_emails, success_emails_out_time_range, already_approved_emails, failed_emails = verify_emails(email_list)
+
+# Output the results to console
+
+success_emails
+success_emails_out_time_range
+already_approved_emails
+failed_emails
+
+# Double check the arrays
+
+mass_approve_by_email(success_emails)
+```
+"""
+
+email_list = Set[]
+
+def verify_emails(email_list)
+    success_emails = []
+    success_emails_out_time_range = []
+    already_approved_emails = []
+    failed_emails = []
+    email_list.each do |email|
+        person = Person.where(email: email).first
+        if person
+            if person.approved
+                # Person already approved
+                already_approved_emails.append(email)
+            else
+                # Person NOT approved
+                if (person.created_at.year == 2021) && (person.created_at.month >= 11)
+                    success_emails.append(email)
+                else
+                    success_emails_out_time_range.append(email)
+                end
+            end
+        else
+            # Failed to find account with email
+            failed_emails.append(email)
+        end
+    end
+    return success_emails, success_emails_out_time_range, already_approved_emails, failed_emails
+end
+
+def manual_approve_and_email(person)
+    person.approved = true
+    person.save
+
+    AccountMailer.account_approval(person).deliver
+end
+
+def manual_approve_and_email_by_id(id)
+    person = Person.find(id)
+    manual_approve_and_email(person)
+end
+
+def manual_approve_and_email_by_email(email)
+    person = Person.where(email: email).first
+    if person
+        manual_approve_and_email(person)
+    else
+        puts "User with " + email + " does not exist"
+    end
+end
+
+def mass_approve_by_email(email_list)
+    email_list.each do |email|
+        manual_approve_and_email_by_email(email)
+    end
+end
