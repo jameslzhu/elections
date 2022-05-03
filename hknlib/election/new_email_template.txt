@@ -25,7 +25,8 @@ We've gathered a few notes about using your HKN accounts:
 2) You can create/delete/store your personal files, and of course files relating to HKN business, on your hkn.eecs.berkeley.edu Google accounts. We recommend you store files on your committee's Team Drive, where files are automatically shared with everyone on your committee (now and in the future).
 
 If you ever choose to change your mind about subscribing to a certain list or want to double-check your list subscriptions, you may review and edit your subscription list at https://groups.google.com/
-Click on the three dots on the list you want to leave, and then select "Leave group"
+Make sure you are signed in to your HKN Gmail!
+Click on the "Leave group" icon on the right (the icon is an arrow exiting a door)
 
 If you have any other questions, please review our FAQ at https://hkn.mu/new-member-faq. Otherwise, feel free to contact us at compserv@hkn.eecs.berkeley.edu.
 
