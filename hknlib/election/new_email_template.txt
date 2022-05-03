@@ -1,0 +1,35 @@
+Hi {first_name},
+
+I've created an account for you at {hkn_email}@hkn.eecs.berkeley.edu and added you to the lists you've requested.
+Here are your account details, as well as a temporarily generated password:
+
+Username: {hkn_email}
+Password: {password}
+
+You will be prompted to change your password upon logging in, which you should do so promptly.
+
+This same account is used to access:
+- HKN Wiki (prot) at https://hkn.mu/prot,
+- HKN Notion at https://hkn.mu/notion, and
+- HKN Slack at https://hkn.slack.com
+
+You can sign up for a Slack account at https://hkn.slack.com/signup.
+Please set your Slack display name (under Profile and Account) to your email username, so we can tag you.
+
+You will be added to Notion sometime within the RRR week or one week of getting this email, whichever is applicable.
+
+We've gathered a few notes about using your HKN accounts:
+
+1) These accounts are a privilege given to you for HKN related business. DO NOT under any circumstances use them for any personal or commercial business, the company you work for, for contact info in registering domains, or sending spam.
+
+2) You can create/delete/store your personal files, and of course files relating to HKN business, on your hkn.eecs.berkeley.edu Google accounts. We recommend you store files on your committee's Team Drive, where files are automatically shared with everyone on your committee (now and in the future).
+
+If you ever choose to change your mind about subscribing to a certain list or want to double-check your list subscriptions, you may review and edit your subscription list at https://groups.google.com/
+Click on the three dots on the list you want to leave, and then select "Leave group"
+
+If you have any other questions, please review our FAQ at https://hkn.mu/new-member-faq. Otherwise, feel free to contact us at compserv@hkn.eecs.berkeley.edu.
+
+Best,
+Compserv
+{COMPSERV_OFFICERS}
+{COMPSERV_AOS}
