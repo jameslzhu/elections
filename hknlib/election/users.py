@@ -89,7 +89,7 @@ def generate_email_message(first_name, sender, hkn_email, receiver, password):
     # Template can be found on https://hkn.mu/compserv-timeline
     #  under "Post-Midnight Meeting" and as "new_email_template.txt"
     message_text = ""
-    with open('new_email_template.txt', 'r') as f:
+    with open('hknlib/election/new_email_template.txt', 'r') as f:
         d = {
             'first_name': first_name,
             'hkn_email': hkn_email,
