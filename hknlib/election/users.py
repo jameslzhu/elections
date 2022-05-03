@@ -51,39 +51,39 @@ def add_users(credentials, election_data):
     #create new account for users, by Carolyn Wang, modified by Catherine Hu
     service = build('admin', 'directory_v1', credentials=credentials)
     gmail_service = build('gmail', 'v1', credentials=credentials)
-    if election_data:
-        for row in election_data:
-            firstName = row[1].strip().capitalize()
-            lastName = row[2].strip().capitalize()
-            randomPass = random_pass()
-            # print(randomPass)
-            email = row[3] + '@hkn.eecs.berkeley.edu'
-            secondary_email = row[4]
-            #TODO: get rid of spaces, capitalize names, error catching
-            body = {
-                'name': {'familyName': lastName, 'givenName': firstName},
-                'password': randomPass,
-                'primaryEmail': email,
-                'emails': [
-                    {
-                        'address': secondary_email,
-                        'type': 'work',
-                        'primary': False,
-                    },
-                ],
-                'changePasswordAtNextLogin': True
-            }
-            try:
-                existing_user = service.users().get(userKey=email).execute()
-                print('User already exists:', email)
-            except Exception as _:
-                message = generate_email_message(firstName, EMAIL_SENDER, row[3], secondary_email, randomPass)
-                result = service.users().insert(body=body).execute()
-                send_message(gmail_service, 'me', message)
-                print('User', email, 'created')
-            # print('added ' + email + ' to users')
-            
-    return
+
+    if not election_data:
+        return
+
+    for row in election_data:
+        firstName = row[1].strip().capitalize()
+        lastName = row[2].strip().capitalize()
+        randomPass = random_pass()
+        # print(randomPass)
+        email = row[3] + '@hkn.eecs.berkeley.edu'
+        secondary_email = row[4]
+        #TODO: get rid of spaces, capitalize names, error catching
+        body = {
+            'name': {'familyName': lastName, 'givenName': firstName},
+            'password': randomPass,
+            'primaryEmail': email,
+            'emails': [
+                {
+                    'address': secondary_email,
+                    'type': 'work',
+                    'primary': False,
+                },
+            ],
+            'changePasswordAtNextLogin': True
+        }
+        try:
+            existing_user = service.users().get(userKey=email).execute()
+            print('User already exists:', email)
+        except Exception as _:
+            message = generate_email_message(firstName, EMAIL_SENDER, row[3], secondary_email, randomPass)
+            result = service.users().insert(body=body).execute()
+            send_message(gmail_service, 'me', message)
+            print('User', email, 'created')
 
 def generate_email_message(first_name, sender, hkn_email, receiver, password):
     # Template can be found on https://hkn.mu/compserv-timeline
