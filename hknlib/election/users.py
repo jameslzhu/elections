@@ -75,11 +75,12 @@ def add_users(credentials, election_data):
             }
             try:
                 existing_user = service.users().get(userKey=email).execute()
-                print('User already exists: ' + email)
+                print('User already exists:', email)
             except Exception as _:
                 message = generate_email_message(firstName, EMAIL_SENDER, row[3], secondary_email, randomPass)
                 result = service.users().insert(body=body).execute()
                 send_message(gmail_service, 'me', message)
+                print('User', email, 'created')
             # print('added ' + email + ' to users')
             
     return
