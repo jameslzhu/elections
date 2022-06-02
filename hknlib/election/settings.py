@@ -16,9 +16,6 @@ SERVICE_ACCOUNT_FILE = 'secret/service.json'
 # Elections spreadsheet
 ELECTION_SPREADSHEET_ID = '1wnZfinKlVUsdXaz-W0ACnb_G7HFfDVlpudUSGpA1GrM'
 
-# Infosession spreadsheet
-INFOSESSION_SPREADSHEET_ID = '183nO7sBKIlveaieqobYuS8io3ztGLZnL2RMyfee1b38'
-
 ##########################################
 #  Variables to edit each semester       #
 ##########################################
@@ -52,14 +49,10 @@ COMPSERV_AOS = "Sam Maher, Yousef Helal, Justin Zhang"
 NEW_OFFICER_SHEET = 'New Officers Sp22'
 # OLD_OFFICER_SHEET = 'Returning Officers'
 MEMBER_SHEET = 'New Members Sp22'
-INFOSESSIONS_SHEET = 'Form Responses 1'
 
 NEW_OFFICER_SHEET_ID = '272309335'
 # OLD_OFFICER_SHEET_ID = '682750401'
 MEMBER_SHEET_ID = '1002817381'
-
-# You probably don't have to edit this one as often
-INFOSESSIONS_SHEET_ID = '1100426286'
 ##########################################
 #                                        #
 ##########################################
@@ -68,7 +61,6 @@ INFOSESSIONS_SHEET_ID = '1100426286'
 NEW_OFFICER_RANGE = '\'{}\'!A:G'.format(NEW_OFFICER_SHEET)
 #OLD_OFFICER_RANGE = '\'{}\'!A:F'.format(OLD_OFFICER_SHEET)
 MEMBER_RANGE = '\'{}\'!A:F'.format(MEMBER_SHEET)
-INFOSESSION_RANGE = '\'{}\'!A:E'.format(INFOSESSIONS_SHEET)
 
 ## DATE SANITY CHECK FUNCTIONS
 ##### Don't touch below functions unless necessary
