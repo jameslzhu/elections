@@ -47,11 +47,9 @@ COMPSERV_OFFICERS = "Oscar Chan, Brian Yu, Anthony Maltsev, Anirban Sarkar"
 COMPSERV_AOS = "Sam Maher, Yousef Helal, Justin Zhang"
 
 NEW_OFFICER_SHEET = 'New Officers Sp22'
-# OLD_OFFICER_SHEET = 'Returning Officers'
 MEMBER_SHEET = 'New Members Sp22'
 
 NEW_OFFICER_SHEET_ID = '272309335'
-# OLD_OFFICER_SHEET_ID = '682750401'
 MEMBER_SHEET_ID = '1002817381'
 ##########################################
 #                                        #
@@ -59,7 +57,6 @@ MEMBER_SHEET_ID = '1002817381'
 
 
 NEW_OFFICER_RANGE = '\'{}\'!A:G'.format(NEW_OFFICER_SHEET)
-#OLD_OFFICER_RANGE = '\'{}\'!A:F'.format(OLD_OFFICER_SHEET)
 MEMBER_RANGE = '\'{}\'!A:F'.format(MEMBER_SHEET)
 
 ## DATE SANITY CHECK FUNCTIONS
