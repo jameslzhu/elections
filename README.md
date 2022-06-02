@@ -44,10 +44,7 @@ pip install -r requirements.txt
 
 ### Scripts
 
-The three scripts `new_members.py`, `new_officers.py`, and `infosession_mailing.py`
-should now work, using these credentials and the hknlib/election module.
-
-We do not use `old_officers.py` anymore and is no longer supported and maintained.
+The two scripts `new_members.py` and `new_officers.py` should now work, using these credentials and the hknlib/election module.
 
 There are various standalone scripts in the `standalone_scripts` folder that run by itself. See file comments for specific instructions. Currently, there is one for LastPass provisioning and one for the HKN Rails website automating the approval accounts process.
 
