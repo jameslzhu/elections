@@ -12,7 +12,7 @@ You will first need the API key for OAuth. Specifically, you will need the
 with the **hkn-ops** login.
 
 12/12/2019 UPDATE: service account and scope have been temporarily migrated. Please contact
-anthony.ding@hkn.mu for the service account credentials.
+anthony.ding@hkn.mu or ochan@hkn.mu for the service account credentials.
 
 Download this service account key, which should be in a JSON file `hknlib.json`.
 Place this file into `secret/`.
