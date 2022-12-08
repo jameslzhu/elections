@@ -1,16 +1,19 @@
-from __future__ import (division, absolute_import, print_function,
-                        unicode_literals)
+from typing import List
 
 import random
+
 import string
-from googleapiclient.discovery import build
-from email.mime.text import MIMEText
+
 import base64
 from urllib.error import HTTPError
-from hknlib.election.settings import COMPSERV_AOS, COMPSERV_OFFICERS
 
-EMAIL_SENDER = "hkn-ops@hkn.eecs.berkeley.edu"
-#Update when running scripts every year
+from email.mime.text import MIMEText
+
+from tqdm import tqdm
+
+from hknlib.election.google_utils import build_directory_service, build_gmail_service
+from hknlib.election.constants import COMPSERV_AOS, COMPSERV_OFFICERS, EMAIL_SENDER, HKN_DOMAIN
+
 
 def random_pass() -> str:
     rand = random.SystemRandom()
@@ -21,89 +24,83 @@ def random_pass() -> str:
         if any(x in passwd for x in string.digits) and any(x in passwd for x in string.punctuation):
             return passwd
 
-class User(object):
-    def __init__(self, username, secondary_email, first_name=None, last_name=None):
-        self.username = username
-        self.secondary_email = secondary_email
-        self.first_name = first_name
-        self.last_name = last_name
+
+class User:
+    def __init__(self, row: List[str]):
+        self.first_name = row[1].strip().capitalize()
+        self.last_name = row[2].strip().capitalize()
+        self.username = row[3].strip()
+        self.secondary_email = row[4]
+        self.password = random_pass()
 
     @property
     def email(self):
-        return "{}@hkn.eecs.berkeley.edu".format(self.username)
+        return f"{self.username}{HKN_DOMAIN}"
 
     @property
     def json(self):
         return {
-            'name': {'familyName': self.last_name, 'givenName': self.first_name},
-            'primaryEmail': self.email,
-            'emails': [
+            "name": {
+                "familyName": self.last_name,
+                "givenName": self.first_name,
+            },
+            "password": self.password,
+            "primaryEmail": self.email,
+            "emails": [
                 {
-                    'address': self.secondary_email,
-                    'type': 'work',
-                    'primary': False,
+                    "address": self.secondary_email,
+                    "type": "work",
+                    "primary": False,
                 },
             ],
+            "changePasswordAtNextLogin": True,
         }
 
 
-def add_users(credentials, election_data):
-    #create new account for users, by Carolyn Wang, modified by Catherine Hu
-    service = build('admin', 'directory_v1', credentials=credentials)
-    gmail_service = build('gmail', 'v1', credentials=credentials)
+def add_users(election_data: List[List[str]]):
+    service = build_directory_service()
+    gmail_service = build_gmail_service()
 
-    if not election_data:
-        return
+    email_template = get_email_template()
 
-    for row in election_data:
-        firstName = row[1].strip().capitalize()
-        lastName = row[2].strip().capitalize()
-        randomPass = random_pass()
-        # print(randomPass)
-        email = row[3] + '@hkn.eecs.berkeley.edu'
-        secondary_email = row[4]
-        #TODO: get rid of spaces, capitalize names, error catching
-        body = {
-            'name': {'familyName': lastName, 'givenName': firstName},
-            'password': randomPass,
-            'primaryEmail': email,
-            'emails': [
-                {
-                    'address': secondary_email,
-                    'type': 'work',
-                    'primary': False,
-                },
-            ],
-            'changePasswordAtNextLogin': True
-        }
+    for row in tqdm(election_data, desc="Adding users"):
+        user = User(row)
+
         try:
-            existing_user = service.users().get(userKey=email).execute()
-            print('User already exists:', email)
-        except Exception as _:
-            message = generate_email_message(firstName, EMAIL_SENDER, row[3], secondary_email, randomPass)
-            result = service.users().insert(body=body).execute()
-            send_message(gmail_service, 'me', message)
-            print('User', email, 'created')
+            service.users().get(userKey=user.email).execute()
+            continue
+        except Exception:
+            pass
 
-def generate_email_message(first_name, sender, hkn_email, receiver, password):
-    # Template can be found on https://hkn.mu/compserv-timeline
-    #  under "Post-Midnight Meeting" and as "new_email_template.txt"
-    message_text = ""
-    with open('hknlib/election/new_email_template.txt', 'r') as f:
-        d = {
-            'first_name': first_name,
-            'hkn_email': hkn_email,
-            'password': password,
-            'COMPSERV_OFFICERS': COMPSERV_OFFICERS,
-            'COMPSERV_AOS': COMPSERV_AOS
-        }
+        service.users().insert(body=user.json).execute()
+
+        message = generate_email_message(email_template, user)
+        send_message(gmail_service, "me", message)
+
+
+def get_email_template() -> str:
+    with open("hknlib/election/new_email_template.txt", "r") as f:
         message_text = f.read()
-        message_text = message_text.format(**d)
+
+    return message_text
+
+
+def generate_email_message(email_template: str, user: User):
+    message_text = email_template.format(**{
+        "first_name": user.first_name,
+        "hkn_email": user.email,
+        "password": user.password,
+        "COMPSERV_OFFICERS": COMPSERV_OFFICERS,
+        "COMPSERV_AOS": COMPSERV_AOS,
+    })
+
     message = MIMEText(message_text)
-    message['to'] = receiver
-    message['from'] = sender
+    message['to'] = user.secondary_email
+    message['from'] = EMAIL_SENDER
     message['subject'] = "[Action Required] Welcome to HKN!"
+
     return {'raw': base64.urlsafe_b64encode(message.as_string().encode('utf-8')).decode('ascii')}
+
 
 def send_message(service, user_id, message):
     try:

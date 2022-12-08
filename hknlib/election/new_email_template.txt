@@ -1,6 +1,6 @@
 Hi {first_name},
 
-I've created an account for you at {hkn_email}@hkn.eecs.berkeley.edu and added you to the lists you've requested.
+I've created an account for you at {hkn_email} and added you to the lists you've requested.
 Here are your account details, as well as a temporarily generated password:
 
 Username: {hkn_email}

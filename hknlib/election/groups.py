@@ -1,86 +1,52 @@
-from __future__ import (division, absolute_import, print_function,
-                        unicode_literals)
+from typing import List
 
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from .settings import ELECTION_SPREADSHEET_ID
+from tqdm import tqdm
 
-HKN_DOMAIN = '@hkn.eecs.berkeley.edu'
+from hknlib.election.constants import HKN_DOMAIN
+from hknlib.election.google_utils import build_directory_service
 
-def add_user_to_group(credentials, user, groupKey, hkn_username=True):
-    #add USER to a mail list GROUP
+
+def add_user_to_group(user, groupKey) -> None:
     user = user.strip()
-    
-    user_email = user + HKN_DOMAIN
-    
-    add_email_to_group(credentials, user_email, groupKey, email_list=False, user=user)
+    email = f"{user}{HKN_DOMAIN}"
+    group = f"{groupKey}{HKN_DOMAIN}"
 
-def add_email_to_group(credentials, email, groupKey, email_list=True, user=None):
-    if user is None:
-        user = email
-    
-    service = build('admin', 'directory_v1', credentials=credentials)
-    
-    email = email.strip()
+    service = build_directory_service()
+
+    response = service.members().hasMember(groupKey=group, memberKey=email).execute()
+    if response["isMember"]:
+        return
 
     body = {
-        'email': email,
-        'role': 'MEMBER',
+        "email": email,
+        "role": "MEMBER",
     }
-    group = groupKey + HKN_DOMAIN
-    if not email_list:
-        response = service.members().hasMember(groupKey=group, memberKey=body.get('email')).execute()
-        if response['isMember']:
-            return False
-    try:
-        _ = service.members().insert(groupKey=group, body=body).execute()
-        print("{}->{}".format(user, groupKey))
-    except HttpError as e:
-        if e.resp.status == 409 and e._get_reason().strip() == "Member already exists.":
-            return False
-        else:
-            print(body)
-            print(e.resp.status, e._get_reason().strip())
-            print("")
-            raise e
-    return True
+    service.members().insert(groupKey=group, body=body).execute()
 
 
-def add_officers_to_committes(credentials, election_data):
-    user_committee = []
-    if election_data:
-        for i in range(0, len(election_data)):
-            if len(election_data[i]) < 6:
-                continue
-            committee = election_data[i][5]
-            if committee == "N/A":
-                continue
-            if committee[-1:] == "@":
-                committee = committee[:-1]
-            user_committee.append((election_data[i][3], committee))
-            #user_committee[users[i]] = committee
+def add_officers_to_committes(election_data: List[List[str]]):
+    missing_data = lambda row: len(row) < 6
+    no_committee = lambda row: row[5] == "N/A"
+    get_groups = lambda committee: [f"{committee}-officers", f"current-{committee}"]
 
-    for user, committee in user_committee:
-        add_user_to_group(credentials, user, committee+'-officers')
-        add_user_to_group(credentials, user, "current-"+committee)
+    for row in tqdm(election_data, desc="Adding officers to committees"):
+        if missing_data(row) or no_committee(row):
+            continue
+
+        user = row[3]
+        committee = row[5].strip("@")
+
+        for group in get_groups(committee):
+            add_user_to_group(user, group)
 
 
-def add_members_to_committes(credentials, election_data):
-    mailing_lists = []
-    if election_data:
-        for i in range(0, len(election_data)):
-            if len(election_data[i]) < 7:
-                continue
-            row = election_data[i]
-            mailing = row[6][:-1].split('@, ')
-            mailing_lists.append((election_data[i][3], mailing))
-            #mailing_lists[users[i]] = mailing_list
+def add_members_to_committes(election_data):
+    for row in tqdm(election_data, "Adding members to committees"):
+        if len(row) < 7:
+            continue
 
-    for user, mailing_list in mailing_lists:
-        for committee in mailing_list:
-            add_user_to_group(credentials, user, committee)
+        user = row[3]
+        groups = row[6][:-1].split("@, ")
 
-def add_all_to_committes(credentials, election_data):
-    # add all users to their committees and groups
-    add_officers_to_committes(credentials, election_data)
-    add_members_to_committes(credentials, election_data)
+        for group in groups:
+            add_user_to_group(user, group)
