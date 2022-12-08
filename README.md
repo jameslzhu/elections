@@ -1,7 +1,7 @@
 HKNlib
 =========
 
-Scripts for running HKN automated account related stuff. (Formerly, HKN elections)
+Scripts for running HKN automated account related operations. 
 
 
 ### Getting API credentials
@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 
 ### Scripts
-The two scripts `new_members.py` and `new_officers.py` should now work, using these credentials and the hknlib/election module.
+The two scripts `new_members.py` and `new_officers.py` should now work, using these credentials and the hknlib/election module. Use `hknlib/config/settings.json` to control which sheets they read off of.
 
 There are various standalone scripts in the `standalone_scripts` folder that run by itself. See file comments for specific instructions. Currently, there is one for LastPass provisioning and one for the HKN Rails website automating the approval accounts process.
 
