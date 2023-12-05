@@ -54,6 +54,7 @@ class User:
                 },
             ],
             "changePasswordAtNextLogin": True,
+            "recoveryEmail": self.secondary_email,
         }
 
 
